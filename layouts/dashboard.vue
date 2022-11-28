@@ -1,14 +1,32 @@
 <template>
   <div class="common-layout">
     <el-container style="height: 100%">
-      <el-aside width="220px">
+      <el-aside width="250px" class="aside-left">
         <div class="logo"></div>
 
         <el-scrollbar>
-          <el-menu default-active="2" class="" :collapse="isCollapsed">
+          <el-menu default-active="2" class="aside-menu" :collapse="isCollapsed" :collapse-transition="false" router>
+            <el-menu-item index="/dashboard">
+              <el-icon><odometer /></el-icon>
+              <span>概览</span>
+            </el-menu-item>
+            <el-sub-menu index="/manage">
+              <template #title>
+                <el-icon><odometer /></el-icon>
+                <span>Navigator One</span>
+              </template>
+              <el-menu-item index="/manage/1-1">item one</el-menu-item>
+              <el-menu-item index="/manage/1-2">item two</el-menu-item>
+              <el-menu-item index="/manage/1-1">item one</el-menu-item>
+              <el-menu-item index="/manage/1-2">item two</el-menu-item>
+              <el-sub-menu index="/manage/1-4">
+                <template #title>item three</template>
+                <el-menu-item index="1-4-1">three inner one</el-menu-item>
+              </el-sub-menu>
+            </el-sub-menu>
             <el-sub-menu index="1">
               <template #title>
-                <el-icon><location /></el-icon>
+                <el-icon><icon-menu /></el-icon>
                 <span>Navigator One</span>
               </template>
               <el-menu-item-group title="Group One">
@@ -23,24 +41,16 @@
                 <el-menu-item index="1-4-1">item one</el-menu-item>
               </el-sub-menu>
             </el-sub-menu>
-            <el-menu-item index="2">
-              <el-icon><icon-menu /></el-icon>
-              <span>Navigator Two</span>
-            </el-menu-item>
-            <el-menu-item index="3" disabled>
-              <el-icon><document /></el-icon>
-              <span>Navigator Three</span>
-            </el-menu-item>
-            <el-menu-item v-for="i in 20" :index="`4-${i}`">
-              <el-icon><setting /></el-icon>
-              <span>Navigator Four</span>
+            <el-menu-item v-for="i in 20" :index="`2-${i}`" :key="i">
+              <el-icon><star /></el-icon>
+              <span>Navigator 4-{{ i }}</span>
             </el-menu-item>
           </el-menu>
         </el-scrollbar>
       </el-aside>
       <el-container>
-        <el-header :collapse.sync="isCollapsed">Dashboard Header</el-header>
-        <el-main>
+        <el-header :collapse.sync="isCollapsed" class="header-right">Dashboard Header</el-header>
+        <el-main class="main-right">
           <el-scrollbar>
             <div>Dashboard Main</div>
             <slot></slot>
@@ -52,7 +62,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue';
+// 谜一般的element-plus，使用setting图标会卡顿（后续及时更新element-plus的模块，也许问题哪天就被解决了）
+import { Odometer, Document, Menu as IconMenu, Location, Setting, Star } from '@element-plus/icons-vue';
 
 const isCollapsed = ref<boolean>(false);
 </script>
@@ -64,15 +75,39 @@ const isCollapsed = ref<boolean>(false);
 
 .logo {
   flex: auto;
-  width: calc(var(--el-aside-width) - 20px);
+  width: calc(var(--el-aside-width) - 50px);
   height: 50px;
   margin: 5px 10px;
   background-color: #e7e7e7;
 }
 
-:deep(.el-aside) {
-  height: 100vh;
+.aside-left,
+.header-right,
+.main-right {
+  background: #fefefe !important;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 5px 0px #cfcfcfcf;
+}
+
+.aside-left {
+  height: calc(100vh - 30px);
   overflow: hidden;
-  border-right: solid 1px var(--el-menu-border-color);
+}
+.aside-menu {
+  border-right: 0;
+  border-right-color: transparent;
+}
+
+.header-right {
+  margin-left: 0;
+  text-align: center;
+}
+
+.main-right {
+  margin-left: 0;
+  margin-top: 0;
+  text-align: left;
 }
 </style>
